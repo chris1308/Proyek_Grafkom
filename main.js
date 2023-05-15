@@ -9,7 +9,7 @@ import { PointerLockControls } from "three/addons/controls/PointerLockControls.j
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 const loader = new GLTFLoader();
-let obj1, obj2, obj3, sofa, tv, plant;
+let obj1, obj2, obj3, sofa, tv, plant, deer, computerDesk;
 
 loader.load("models/wooden_table/wooden_table_02_4k.gltf", function (gltf) {
   obj1 = gltf.scene;
@@ -43,12 +43,12 @@ loader.load(
 );
 
 loader.load(
-  "models/sofa.glb",
+  "models/modern_sofa.glb",
   function (gltf) {
     sofa = gltf.scene;
-    gltf.scene.scale.set(3, 3, 3);
+    gltf.scene.scale.set(2, 2, 2);
     scene.add(gltf.scene);
-    sofa.position.set(-5, 0.5, 0);
+    sofa.position.set(-5, 0, 0);
     sofa.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI / 2);
   },
   undefined,
@@ -65,6 +65,36 @@ loader.load(
     scene.add(gltf.scene);
     tv.position.set(-13, 1.5, 0);
     tv.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2); //memutar object
+  },
+  undefined,
+  function (error) {
+    console.error(error);
+  }
+);
+
+loader.load(
+  "models/deer.glb",
+  function (gltf) {
+    deer = gltf.scene;
+    gltf.scene.scale.set(2, 1.9, 2);
+    scene.add(gltf.scene);
+    deer.position.set(14, 2.5, 0);
+  },
+  undefined,
+  function (error) {
+    console.error(error);
+  }
+);
+
+
+loader.load(
+  "models/computer_desk.glb",
+  function (gltf) {
+    computerDesk = gltf.scene;
+    gltf.scene.scale.set(0.4, 0.4, 0.4);
+    scene.add(gltf.scene);
+    computerDesk.position.set(13.4, 0, 3);
+    computerDesk.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI); //memutar object
   },
   undefined,
   function (error) {
@@ -124,14 +154,16 @@ const pointLightD = new THREE.PointLight(0xffffff, 1, 100);
 pointLightD.position.set(-7.5, 2.5, 7.5);
 scene.add(pointLightA, pointLightB, pointLightC, pointLightD);
 
-const pointLight2 = new THREE.PointLight(0xffffff, 1, 10);
-pointLight2.position.set(0, 2.5, 0);
-pointLight2.castShadow = true;
-const ambientLight = new THREE.AmbientLight(0xffffff);
-scene.add(pointLight2);
+// pointLightA.castShadow = true;
+// pointLightB.castShadow = true;
+// pointLightC.castShadow = true;
+// pointLightD.castShadow = true;
 
-const pointLightHelper = new THREE.PointLightHelper(pointLight2, 1, 0xff0000);
-scene.add(pointLightHelper);
+
+const ambientLight = new THREE.AmbientLight(0xffffff);
+
+// const pointLightHelper = new THREE.PointLightHelper(pointLight2, 1, 0xff0000);
+// scene.add(pointLightHelper);
 
 // const helper = new THREE.CameraHelper( camera );
 // scene.add( helper );
@@ -151,6 +183,10 @@ const texture3 = new THREE.TextureLoader().load("texture/wall.jpg");
 texture3.wrapS = THREE.RepeatWrapping;
 texture3.wrapT = THREE.RepeatWrapping;
 texture3.repeat.set(1, 6);
+
+const textureTechno = new THREE.TextureLoader().load("texture/techno.jpg");
+const textureGlass = new THREE.TextureLoader().load("texture/stainedglass.jpg");
+
 
 //floor
 const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, 30, 20, 20), new THREE.MeshPhongMaterial({ map: texture1, side: THREE.DoubleSide }));
@@ -204,10 +240,17 @@ tembokDepan.translateX(0).translateY(2.5).translateZ(15.5);
 tembokDepan.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
 tembokDepan.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
 
-const geometry = new THREE.BoxGeometry(1, 1, 1);
-// const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const material = new THREE.MeshBasicMaterial(new THREE.Color("rgb(255, 0, 0)"));
-const cube = new THREE.Mesh(geometry, material);
+// const geometry = new THREE.BoxGeometry(1, 1, 1);
+// // const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+// const material = new THREE.MeshBasicMaterial(new THREE.Color("rgb(255, 0, 0)"));
+// const cube = new THREE.Mesh(geometry, material);
+// cube.position.y = 2.5;
+// scene.add(cube);
+
+//lamp at center
+const box = new THREE.BoxGeometry(1, 1, 1);
+let boxMat = new THREE.MeshPhysicalMaterial({map: textureTechno, shininess: 50, reflectivity: 0.5, emissive: 0x0071c7, emissiveIntensity: 0.7});
+let cube = new THREE.Mesh(box, boxMat);
 cube.position.y = 2.5;
 scene.add(cube);
 
@@ -261,22 +304,87 @@ addEventListener("keyup", (e) => {
   keyboard[e.key] = false;
 });
 
+let lampSwitch = false;
+
+
 function receiveKeyboard(delta) {
   const kecepatan = 5;
   const kecepatanActual = kecepatan * delta;
-  if (keyboard["w"] && camera.position.z > -13) {
+  if (keyboard["w"]) {
     controls.moveForward(kecepatanActual);
+    if(camera.position.z <= -13){//tembok depan
+      camera.position.z = -12.99;
+    }
+    if(camera.position.z >= 13){//tembok belakang
+      camera.position.z = 12.99;
+    }
+    if(camera.position.x <= -13){//tembok kiri
+      camera.position.x = -12.99;
+    }
+    if(camera.position.x >= 13){//tembok kanan
+      camera.position.x = 12.99;
+    }
+    // console.log(camera.position.z);
   }
-  if (keyboard["s"] && camera.position.z < 13) {
+  if (keyboard["s"]) {
     controls.moveForward(-kecepatanActual);
+    if(camera.position.z <= -13){//tembok depan
+      camera.position.z = -12.99;
+    }
+    if(camera.position.z >= 13){//tembok belakang
+      camera.position.z = 12.99;
+    }
+    if(camera.position.x <= -13){//tembok kiri
+      camera.position.x = -12.99;
+    }
+    if(camera.position.x >= 13){//tembok kanan
+      camera.position.x = 12.99;
+    }
+    // console.log(camera.position.z);
   }
-  if (keyboard["a"] && camera.position.x > -13) {
+  if (keyboard["a"]) {
     controls.moveRight(-kecepatanActual);
+    if(camera.position.z <= -13){//tembok depan
+      camera.position.z = -12.99;
+    }
+    if(camera.position.z >= 13){//tembok belakang
+      camera.position.z = 12.99;
+    }
+    if(camera.position.x <= -13){//tembok kiri
+      camera.position.x = -12.99;
+    }
+    if(camera.position.x >= 13){//tembok kanan
+      camera.position.x = 12.99;
+    }
   }
-  if (keyboard["d"] && camera.position.x < 13) {
+  if (keyboard["d"]) {
     controls.moveRight(kecepatanActual);
+    if(camera.position.z <= -13){//tembok depan
+      camera.position.z = -12.99;
+    }
+    if(camera.position.z >= 13){//tembok belakang
+      camera.position.z = 12.99;
+    }
+    if(camera.position.x <= -13){//tembok kiri
+      camera.position.x = -12.99;
+    }
+    if(camera.position.x >= 13){//tembok kanan
+      camera.position.x = 12.99;
+    }
   }
-  //   console.log(camera.position.x);
+  if(keyboard["o"]){
+    lampSwitch = !lampSwitch;
+    if(lampSwitch){// saat true
+      const pointLightCenter = new THREE.PointLight(0xff0000, 1, 10);
+      pointLightCenter.position.set(0, 2.5, 0);
+      pointLightCenter.castShadow = true;
+      pointLightCenter.name = "pointLightCenter";
+      scene.add(pointLightCenter);
+    }else{
+      scene.remove(scene.getObjectByName("pointLightCenter"));
+    }
+    keyboard["o"] = false;
+  }
 }
 
 // ----------------------------------------------------------------------
@@ -298,6 +406,7 @@ function receiveKeyboard(delta) {
 // 	console.error( error );
 
 // } );
+
 
 function animate() {
   requestAnimationFrame(animate);
