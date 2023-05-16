@@ -245,6 +245,7 @@ const material = new THREE.MeshBasicMaterial({ map: texture4 });
 // const material = new THREE.MeshBasicMaterial(new THREE.Color("rgb(255, 0, 0)"));
 const cube = new THREE.Mesh(geometry, material);
 cube.position.y = 2.5;
+cube.name = "kubus";
 scene.add(cube);
 
 //lamp at center
