@@ -118,7 +118,7 @@ const pointLightA = new THREE.PointLight(0xffffff, 1, 100);
 pointLightA.position.set(7.5, 3.8, -7.5);
 const pointLightB = new THREE.PointLight(0xffffff, 1, 100);
 pointLightB.position.set(-7.5, 3.8, -7.5);
-const pointLightC = new THREE.PointLight(0xffffff, 1, 100);
+const pointLightC = new THREE.PointLight(0xffffff, 1, 10);
 pointLightC.position.set(7.5, 2.5, 7.5);
 const pointLightD = new THREE.PointLight(0xffffff, 1, 100);
 pointLightD.position.set(-7.5, 2.5, 7.5);
@@ -127,7 +127,7 @@ scene.add(pointLightA, pointLightB, pointLightC, pointLightD);
 const pointLight2 = new THREE.PointLight(0xffffff, 1, 10);
 pointLight2.position.set(0, 2.5, 0);
 pointLight2.castShadow = true;
-const ambientLight = new THREE.AmbientLight(0xffffff);
+// const ambientLight = new THREE.AmbientLight(0xffffff);
 scene.add(pointLight2);
 
 const pointLightHelper = new THREE.PointLightHelper(pointLight2, 1, 0xff0000);
@@ -151,6 +151,8 @@ const texture3 = new THREE.TextureLoader().load("texture/wall.jpg");
 texture3.wrapS = THREE.RepeatWrapping;
 texture3.wrapT = THREE.RepeatWrapping;
 texture3.repeat.set(1, 6);
+
+const texture4 = new THREE.TextureLoader().load("texture/tesseract.jpg");
 
 //floor
 const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, 30, 20, 20), new THREE.MeshPhongMaterial({ map: texture1, side: THREE.DoubleSide }));
@@ -204,11 +206,13 @@ tembokDepan.translateX(0).translateY(2.5).translateZ(15.5);
 tembokDepan.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
 tembokDepan.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
 
+//kubus di tengah
 const geometry = new THREE.BoxGeometry(1, 1, 1);
-// const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const material = new THREE.MeshBasicMaterial(new THREE.Color("rgb(255, 0, 0)"));
+const material = new THREE.MeshBasicMaterial({ map: texture4 });
+// const material = new THREE.MeshBasicMaterial(new THREE.Color("rgb(255, 0, 0)"));
 const cube = new THREE.Mesh(geometry, material);
 cube.position.y = 2.5;
+cube.name = "kubus";
 scene.add(cube);
 
 const geometry2 = new THREE.CylinderGeometry(1, 1, 2.5);
@@ -260,7 +264,8 @@ addEventListener("keydown", (e) => {
 addEventListener("keyup", (e) => {
   keyboard[e.key] = false;
 });
-
+let kubus;
+let cekKubus = false;
 function receiveKeyboard(delta) {
   const kecepatan = 5;
   const kecepatanActual = kecepatan * delta;
@@ -275,6 +280,24 @@ function receiveKeyboard(delta) {
   }
   if (keyboard["d"] && camera.position.x < 13) {
     controls.moveRight(kecepatanActual);
+  }
+
+  if (keyboard["x"]) {
+    scene.remove(scene.getObjectByName("kubus"));
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    let material;
+    if (cekKubus == false) {
+      material = new THREE.MeshBasicMaterial(new THREE.Color("rgb(255, 0, 0)"));
+      cekKubus = true;
+    } else {
+      material = new THREE.MeshBasicMaterial({ map: texture4 });
+      cekKubus = false;
+    }
+    keyboard["x"] = false;
+    kubus = new THREE.Mesh(geometry, material);
+    kubus.position.y = 2.5;
+    kubus.name = "kubus";
+    scene.add(kubus);
   }
   //   console.log(camera.position.x);
 }
@@ -307,7 +330,10 @@ function animate() {
   // cylinder2.rotation.x += 0.02;
   // cylinder2.rotation.y += 0.01;
   // cylinder2.rotation.z += 0.01;
-
+  if (kubus) {
+    kubus.rotation.x += 0.01;
+    kubus.rotation.y += 0.01;
+  }
   torus.rotation.x += 0.01;
   torus.rotation.y += 0.01;
 
