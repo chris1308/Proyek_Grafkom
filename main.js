@@ -111,14 +111,18 @@ loader.load(
   }
 );
 
+let mixer, mixer2;
 loader.load(
-  "models/plant_in_pot.glb",
+  "models/plant/scene.gltf",
   function (gltf) {
     plant = gltf.scene;
-    gltf.scene.scale.set(0.3, 0.3, 0.3);
+    gltf.scene.scale.set(0.8, 0.8, 0.8);
     scene.add(gltf.scene);
     plant.position.set(-13, 0, 4);
     plant.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+
+    mixer2 = new THREE.AnimationMixer(plant);
+    mixer2.clipAction(gltf.animations[0]).play();
   },
   undefined,
   function (error) {
@@ -126,7 +130,6 @@ loader.load(
   }
 );
 
-let mixer;
 loader.load(
   "models/cleaner/scene.gltf",
   function (gltf) {
@@ -517,6 +520,7 @@ function animate() {
   let delta = clock.getDelta();
   receiveKeyboard(delta);
   mixer.update(delta);
+  mixer2.update(delta);
   renderer.render(scene, camera);
 }
 
