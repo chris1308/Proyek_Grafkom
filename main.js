@@ -519,8 +519,12 @@ function animate() {
   // controls2.update();
   let delta = clock.getDelta();
   receiveKeyboard(delta);
-  mixer.update(delta);
-  mixer2.update(delta);
+  if(mixer){
+    mixer.update(delta);
+  }
+  if(mixer2){
+    mixer2.update(delta);
+  }
   renderer.render(scene, camera);
 }
 
