@@ -9,7 +9,7 @@ import { PointerLockControls } from "three/addons/controls/PointerLockControls.j
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 const loader = new GLTFLoader();
-let obj1, obj2, obj3, sofa, tv, plant, deer, computerDesk;
+let obj1, obj2, obj3, sofa, tv, plant, deer, computerDesk, cleaner;
 
 loader.load("models/wooden_table/wooden_table_02_4k.gltf", function (gltf) {
   obj1 = gltf.scene;
@@ -35,6 +35,11 @@ loader.load(
     gltf3.scene.scale.set(1, 1, 1);
     scene.add(gltf3.scene);
     obj3.position.set(-7.5, 5, -7.5);
+    obj3.traverse(function(child){
+      if(child){
+        child.receiveShadow = true;
+      }
+    });
   },
   undefined,
   function (error) {
@@ -50,6 +55,11 @@ loader.load(
     scene.add(gltf.scene);
     sofa.position.set(-5, 0, 0);
     sofa.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI / 2);
+    sofa.traverse(function(child){
+      if(child){
+        child.receiveShadow = true;
+      }
+    });
   },
   undefined,
   function (error) {
@@ -116,6 +126,30 @@ loader.load(
   }
 );
 
+let mixer;
+loader.load(
+  "models/cleaner/scene.gltf",
+  function (gltf) {
+    cleaner = gltf.scene;
+    gltf.scene.scale.set(3, 3, 3);
+    scene.add(gltf.scene);
+    cleaner.position.set(-1, 0, 2);
+    cleaner.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI / 2);
+    cleaner.traverse(function(child){
+      if(child){
+        child.receiveShadow = true;
+      }
+    });
+    mixer = new THREE.AnimationMixer(cleaner);
+    mixer.clipAction(gltf.animations[0]).play();
+
+  },
+  undefined,
+  function (error) {
+    console.error(error);
+  }
+);
+
 let kulkas;
 loader.load("models/refrigerator/scene.gltf", function (gltf) {
   kulkas = gltf.scene;
@@ -137,6 +171,8 @@ camera.position.x = 0;
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFShadowMap;
 
 //helper koordinat
 const axesHelper = new THREE.AxesHelper(5); //garis bantu axis
@@ -150,18 +186,27 @@ pointLightB.position.set(-7.5, 3.8, -7.5);
 const pointLightC = new THREE.PointLight(0xffffff, 1, 10);
 pointLightC.position.set(7.5, 2.5, 7.5);
 const pointLightD = new THREE.PointLight(0xffffff, 1, 100);
-pointLightD.position.set(-7.5, 2.5, 7.5);
+pointLightD.position.set(-5, 4, 0);
+// pointLightD.position.set(-7.5, 2.5, 7.5);
 scene.add(pointLightA, pointLightB, pointLightC, pointLightD);
 
-// pointLightA.castShadow = true;
-// pointLightB.castShadow = true;
-// pointLightC.castShadow = true;
-// pointLightD.castShadow = true;
+pointLightA.castShadow = true;
+pointLightA.shadow.mapSize.width = 512;
+pointLightA.shadow.mapSize.height = 512;
+pointLightB.castShadow = true;
+pointLightB.shadow.mapSize.width = 512;
+pointLightB.shadow.mapSize.height = 512;
+pointLightC.castShadow = true;
+pointLightD.castShadow = true;
+
+const pointLightCenter = new THREE.PointLight(0xffffff, 1, 10);
+pointLightCenter.position.set(0, 2.5, 0);
+pointLightCenter.castShadow = true;
 
 const ambientLight = new THREE.AmbientLight(0xffffff);
 
-// const pointLightHelper = new THREE.PointLightHelper(pointLight2, 1, 0xff0000);
-// scene.add(pointLightHelper);
+const pointLightHelper = new THREE.PointLightHelper(pointLightD, 1, 0xff0000);
+scene.add(pointLightHelper);
 
 // const helper = new THREE.CameraHelper( camera );
 // scene.add( helper );
@@ -192,6 +237,7 @@ const floor = new THREE.Mesh(new THREE.PlaneGeometry(30, 30, 20, 20), new THREE.
 floor.rotation.x = -Math.PI / 2;
 floor.receiveShadow = true;
 scene.add(floor);
+floor.receiveShadow = true;
 
 //atap
 const planeGeometry1 = new THREE.PlaneGeometry(30, 30, 20, 20);
@@ -199,6 +245,7 @@ const planeMaterial1 = new THREE.MeshPhongMaterial({ map: texture1, side: THREE.
 const atap = new THREE.Mesh(planeGeometry1, planeMaterial1);
 atap.rotation.x = -Math.PI / 2;
 atap.translateZ(5);
+atap.receiveShadow = true;
 scene.add(atap);
 
 //tembok kiri (tinggi, tebal, panjang)
@@ -469,6 +516,7 @@ function animate() {
   // controls2.update();
   let delta = clock.getDelta();
   receiveKeyboard(delta);
+  mixer.update(delta);
   renderer.render(scene, camera);
 }
 

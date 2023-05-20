@@ -1,0 +1,11 @@
+Model Information:
+* title:	Robot vacuum cleaner
+* source:	https://sketchfab.com/3d-models/robot-vacuum-cleaner-86e2e4c942024a1f9eabeed48d8d3f63
+* author:	DimaSP (https://sketchfab.com/huekmakorek)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Robot vacuum cleaner" (https://sketchfab.com/3d-models/robot-vacuum-cleaner-86e2e4c942024a1f9eabeed48d8d3f63) by DimaSP (https://sketchfab.com/huekmakorek) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
