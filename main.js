@@ -35,8 +35,8 @@ loader.load(
     gltf3.scene.scale.set(1, 1, 1);
     scene.add(gltf3.scene);
     obj3.position.set(-7.5, 5, -7.5);
-    obj3.traverse(function(child){
-      if(child){
+    obj3.traverse(function (child) {
+      if (child) {
         child.receiveShadow = true;
       }
     });
@@ -55,8 +55,8 @@ loader.load(
     scene.add(gltf.scene);
     sofa.position.set(-5, 0, 0);
     sofa.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI / 2);
-    sofa.traverse(function(child){
-      if(child){
+    sofa.traverse(function (child) {
+      if (child) {
         child.receiveShadow = true;
       }
     });
@@ -138,14 +138,13 @@ loader.load(
     scene.add(gltf.scene);
     cleaner.position.set(-1, 0, 2);
     cleaner.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI / 2);
-    cleaner.traverse(function(child){
-      if(child){
+    cleaner.traverse(function (child) {
+      if (child) {
         child.receiveShadow = true;
       }
     });
     mixer = new THREE.AnimationMixer(cleaner);
     mixer.clipAction(gltf.animations[0]).play();
-
   },
   undefined,
   function (error) {
@@ -160,6 +159,15 @@ loader.load("models/refrigerator/scene.gltf", function (gltf) {
   scene.add(gltf.scene);
   kulkas.position.set(-2, 0, -13);
   // kulkas.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+});
+
+let rak;
+loader.load("models/shelf/scene.gltf", function (gltf) {
+  rak = gltf.scene;
+  gltf.scene.scale.set(2.2, 2.2, 2.2);
+  scene.add(gltf.scene);
+  rak.position.set(14.5, 0, 7);
+  rak.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
 });
 
 const scene = new THREE.Scene();
@@ -519,10 +527,10 @@ function animate() {
   // controls2.update();
   let delta = clock.getDelta();
   receiveKeyboard(delta);
-  if(mixer){
+  if (mixer) {
     mixer.update(delta);
   }
-  if(mixer2){
+  if (mixer2) {
     mixer2.update(delta);
   }
   renderer.render(scene, camera);
