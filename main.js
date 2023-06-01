@@ -204,6 +204,50 @@ loader.load("models/printer/scene.gltf", function (gltf) {
   printer.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI);
 });
 
+let piano;
+loader.load("models/grand_piano/scene.gltf", function (gltf) {
+  piano = gltf.scene;
+  gltf.scene.scale.set(0.12, 0.12, 0.12);
+  scene.add(gltf.scene);
+  piano.position.set(11, 2, -11);
+  piano.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI / 4);
+});
+
+let dispenser;
+loader.load("models/dispenser/scene.gltf", function (gltf) {
+  dispenser = gltf.scene;
+  gltf.scene.scale.set(2.5, 2.5, 2.5);
+  scene.add(gltf.scene);
+  dispenser.position.set(-4, 0, -13.5);
+});
+
+let grandclock;
+loader.load("models/grandfather_clock/scene.gltf", function (gltf) {
+  grandclock = gltf.scene;
+  gltf.scene.scale.set(2.2, 2, 2.2);
+  scene.add(gltf.scene);
+  grandclock.position.set(0, 0, 14.3);
+  grandclock.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI);
+});
+
+let painting;
+loader.load("models/decoration/scene.gltf", function (gltf) {
+  painting = gltf.scene;
+  gltf.scene.scale.set(3.5, 3.5, 3.5);
+  scene.add(gltf.scene);
+  painting.position.set(4, 2, 15);
+  painting.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+});
+
+let painting2;
+loader.load("models/painting2/scene.gltf", function (gltf) {
+  painting2 = gltf.scene;
+  gltf.scene.scale.set(2, 2, 2);
+  scene.add(gltf.scene);
+  painting2.position.set(-4, 3, 15);
+  painting2.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI);
+});
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 // scene.background = texture1;
@@ -221,7 +265,7 @@ renderer.shadowMap.type = THREE.PCFShadowMap;
 
 //helper koordinat
 const axesHelper = new THREE.AxesHelper(5); //garis bantu axis
-scene.add(axesHelper);
+// scene.add(axesHelper);
 
 //light
 const pointLightA = new THREE.PointLight(0xffffff, 1, 100);
@@ -251,7 +295,7 @@ pointLightCenter.castShadow = true;
 const ambientLight = new THREE.AmbientLight(0xffffff);
 
 const pointLightHelper = new THREE.PointLightHelper(pointLightD, 1, 0xff0000);
-scene.add(pointLightHelper);
+// scene.add(pointLightHelper);
 
 // const helper = new THREE.CameraHelper( camera );
 // scene.add( helper );
