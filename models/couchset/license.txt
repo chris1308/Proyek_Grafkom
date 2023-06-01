@@ -1,0 +1,11 @@
+Model Information:
+* title:	Three Piece Living Room Set
+* source:	https://sketchfab.com/3d-models/three-piece-living-room-set-0b53af392e714246b2202a8677836597
+* author:	MrPuppet (https://sketchfab.com/MrPuppet)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Three Piece Living Room Set" (https://sketchfab.com/3d-models/three-piece-living-room-set-0b53af392e714246b2202a8677836597) by MrPuppet (https://sketchfab.com/MrPuppet) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

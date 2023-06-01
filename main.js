@@ -48,10 +48,10 @@ loader.load(
 );
 
 loader.load(
-  "models/modern_sofa.glb",
+  "models/couchset/scene.gltf",
   function (gltf) {
     sofa = gltf.scene;
-    gltf.scene.scale.set(2, 2, 2);
+    gltf.scene.scale.set(50, 50, 50);
     scene.add(gltf.scene);
     sofa.position.set(-5, 0, 0);
     sofa.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI / 2);
@@ -75,6 +75,22 @@ loader.load(
     scene.add(gltf.scene);
     tv.position.set(-13, 1.5, 0);
     tv.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2); //memutar object
+  },
+  undefined,
+  function (error) {
+    console.error(error);
+  }
+);
+
+let mejakopi;
+loader.load(
+  "models/coffeetable/scene.gltf",
+  function (gltf) {
+    mejakopi = gltf.scene;
+    gltf.scene.scale.set(2, 1.5, 2);
+    scene.add(gltf.scene);
+    mejakopi.position.set(-7, 0, 0);
+    mejakopi.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2); //memutar object
   },
   undefined,
   function (error) {
@@ -170,6 +186,24 @@ loader.load("models/shelf/scene.gltf", function (gltf) {
   rak.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
 });
 
+let meja;
+loader.load("models/desk/scene.gltf", function (gltf) {
+  meja = gltf.scene;
+  gltf.scene.scale.set(4, 3, 2);
+  scene.add(gltf.scene);
+  meja.position.set(14.5, 0, -2);
+  meja.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+});
+
+let printer;
+loader.load("models/printer/scene.gltf", function (gltf) {
+  printer = gltf.scene;
+  gltf.scene.scale.set(0.4, 0.4, 0.4);
+  scene.add(gltf.scene);
+  printer.position.set(14, 1, -2);
+  printer.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.PI);
+});
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 // scene.background = texture1;
@@ -233,6 +267,11 @@ texture2.wrapS = THREE.RepeatWrapping;
 texture2.wrapT = THREE.RepeatWrapping;
 texture2.repeat.set(2, 6);
 
+const textureKayu = new THREE.TextureLoader().load("texture/kayu.jpg");
+textureKayu.wrapS = THREE.RepeatWrapping;
+textureKayu.wrapT = THREE.RepeatWrapping;
+textureKayu.repeat.set(1, 6);
+
 const texture3 = new THREE.TextureLoader().load("texture/wall.jpg");
 texture3.wrapS = THREE.RepeatWrapping;
 texture3.wrapT = THREE.RepeatWrapping;
@@ -261,7 +300,7 @@ scene.add(atap);
 
 //tembok kiri (tinggi, tebal, panjang)
 const cubeGeometry1 = new THREE.BoxGeometry(5, 1, 30);
-const cubeMaterial1 = new THREE.MeshBasicMaterial({ map: texture3 });
+const cubeMaterial1 = new THREE.MeshBasicMaterial({ map: textureKayu });
 const tembokKiri = new THREE.Mesh(cubeGeometry1, cubeMaterial1);
 scene.add(tembokKiri);
 
@@ -270,7 +309,7 @@ tembokKiri.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
 
 //tembok kanan
 const cubeGeometry2 = new THREE.BoxGeometry(5, 1, 30);
-const cubeMaterial2 = new THREE.MeshBasicMaterial({ map: texture3 });
+const cubeMaterial2 = new THREE.MeshBasicMaterial({ map: textureKayu });
 const tembokKanan = new THREE.Mesh(cubeGeometry2, cubeMaterial2);
 scene.add(tembokKanan);
 
@@ -279,7 +318,7 @@ tembokKanan.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
 
 //tembok belakang
 const cubeGeometry3 = new THREE.BoxGeometry(5, 1, 30);
-const cubeMaterial3 = new THREE.MeshBasicMaterial({ map: texture2 });
+const cubeMaterial3 = new THREE.MeshBasicMaterial({ map: textureKayu });
 const tembokBelakang = new THREE.Mesh(cubeGeometry3, cubeMaterial3);
 scene.add(tembokBelakang);
 
@@ -289,7 +328,7 @@ tembokBelakang.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 2);
 
 //tembok depan
 const cubeGeometry4 = new THREE.BoxGeometry(5, 1, 30);
-const cubeMaterial4 = new THREE.MeshBasicMaterial({ map: texture2 });
+const cubeMaterial4 = new THREE.MeshBasicMaterial({ map: textureKayu });
 const tembokDepan = new THREE.Mesh(cubeGeometry4, cubeMaterial4);
 scene.add(tembokDepan);
 
