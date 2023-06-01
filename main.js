@@ -213,12 +213,30 @@ loader.load("models/grand_piano/scene.gltf", function (gltf) {
   piano.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI / 4);
 });
 
+// let dispenser;
+// loader.load("models/dispenser/scene.gltf", function (gltf) {
+//   dispenser = gltf.scene;
+//   gltf.scene.scale.set(2.5, 2.5, 2.5);
+//   scene.add(gltf.scene);
+//   dispenser.position.set(-4, 0, -13.5);
+// });
+
 let dispenser;
-loader.load("models/dispenser/scene.gltf", function (gltf) {
+loader.load("models/water_dispenser.glb", function (gltf) {
   dispenser = gltf.scene;
-  gltf.scene.scale.set(2.5, 2.5, 2.5);
+  gltf.scene.scale.set(0.5, 0.5, 0.5);
   scene.add(gltf.scene);
-  dispenser.position.set(-4, 0, -13.5);
+  dispenser.position.set(-4, 3.3, -14);
+  dispenser.rotateOnAxis(new THREE.Vector3(0, 1, 0), -Math.PI / 2);
+
+});
+
+let billiard;
+loader.load("models/bumper_billiard.glb", function (gltf) {
+  billiard = gltf.scene;
+  gltf.scene.scale.set(3, 2, 3);
+  scene.add(gltf.scene);
+  billiard.position.set(-7.5, 0, -9.5);
 });
 
 let grandclock;
@@ -273,7 +291,7 @@ pointLightA.position.set(7.5, 3.8, -7.5);
 const pointLightB = new THREE.PointLight(0xffffff, 1, 100);
 pointLightB.position.set(-7.5, 3.8, -7.5);
 const pointLightC = new THREE.PointLight(0xffffff, 1, 10);
-pointLightC.position.set(7.5, 2.5, 7.5);
+pointLightC.position.set(7.5, 3.8, 7.5);
 const pointLightD = new THREE.PointLight(0xffffff, 1, 100);
 pointLightD.position.set(-5, 4, 0);
 // pointLightD.position.set(-7.5, 2.5, 7.5);
@@ -551,7 +569,7 @@ function receiveKeyboard(delta) {
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     let material;
     if (cekKubus == false) {
-      material = new THREE.MeshBasicMaterial(new THREE.Color("rgb(255, 0, 0)"));
+      material = new THREE.MeshBasicMaterial({map: textureTechno});
       cekKubus = true;
     } else {
       material = new THREE.MeshBasicMaterial({ map: texture4 });
